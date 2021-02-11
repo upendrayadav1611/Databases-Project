@@ -19,11 +19,11 @@ def Delete_Expired_Chocolates():
 try:
     with connect(
         host="localhost",
-        user="",
-        password="",
+        user=input("Enter username: "),
+        password=getpass("Enter password: "),
         database="Chocolates_Info",
     ) as connection:
-        #show_table()
-        Delete_Expired_Chocolates()
+        show_table()
+        #Delete_Expired_Chocolates()
 except Error as e:
     print(e)
