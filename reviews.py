@@ -176,6 +176,50 @@ def add_review():
         delete_review_Ingredients(ChocolateId)
         delete_review_Chocolates(ChocolateId)
 
+def check_chocolate_table(ChocolateId,Quantity):
+    show_table_query = """
+    SELECT Quantity
+    FROM Chocolates
+    WHERE ChocolateId = "%d"
+    """ % (int(ChocolateId))
+    with connection.cursor() as cursor:
+     cursor.execute(show_table_query)
+     result = cursor.fetchall()
+     for res in result:
+        chocolate_count = res[0]
+    if chocolate_count>=Quantity:
+        return (1,chocolate_count)
+    else:
+        return (0,chocolate_count)
+    
+def update_Chocolates_table_2(ChocolateId,Quantity):
+    
+    if Quantity > 0:
+        update_Chocolates_table_2_query = """
+            UPDATE Chocolates
+            SET Quantity = "%d"
+            WHERE ChocolateId = "%d"
+            """ % (Quantity, ChocolateId)
+        with connection.cursor() as cursor:
+            cursor.execute(update_Chocolates_table_2_query)
+            connection.commit()
+    else:
+        delete_review_table(ChocolateId)
+        delete_review_Ingredients(ChocolateId)
+        delete_review_Chocolates(ChocolateId)
+
+
+
+def buy_chocolate():
+    show_Chocolates()
+    ChocolateId = int(input("Enter the ChocolateId: "))
+    Quantity = int(input("Enter the quantity: "))
+    if check_chocolate_table(ChocolateId,Quantity)[0]==1:
+        update_Chocolates_table_2(ChocolateId,check_chocolate_table(ChocolateId,Quantity)[1]-Quantity)
+        print("Have your chocolates, Good Day :)")
+    else:
+        print("We don't have that many quantity for " + ChocolateId + " chocolate")
+
 try:
     with connect(
         host="localhost",
@@ -187,9 +231,13 @@ try:
         #create_file()
         show_Chocolates()
         show_Ingredients()
-        add_review()
-        show_Chocolates()
-        show_Ingredients()
-        show_Reviews()
+        #add_review()
+       
+        #show_Reviews()
+        #buy_chocolate()
+
+        #show_Chocolates()
+        #show_Ingredients()
+
 except Error as e:
     print(e)
