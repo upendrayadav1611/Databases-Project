@@ -79,13 +79,17 @@ def Deletion_basedon_lastDateBought():
     cursor.execute(Get_date)
     result = cursor.fetchall()
     f=open('lastDateBought.txt','w')
+    message="Chocolates with following ids were bought a long time ago:"
+    chocolateid=[]
     for res in result:
         f.write(str(res[0]))
         f.write("\n")
+        chocolateid.append(str(res[0]))
         delete_from_Ingredients(res[0])
         delete_from_Chocolates(res[0])
         delete_from_Reviews(res[0])
     f.close()
+    send_email(chocolateid,message)
 
 """ try:
     with connect(
